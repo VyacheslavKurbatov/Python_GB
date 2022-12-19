@@ -43,15 +43,3 @@ print(number_list)
 
 shuffl_list = shuffling_list(number_list)
 print(shuffl_list)
-
-
-# number_list2 = []
-# len_number_list = len(number_list)
-#
-# while len_number_list > 0:
-#     rnd_index = randint(0, len_number_list)
-#     digit = number_list.pop(rnd_index-1)
-#     number_list2.append(digit)
-#     len_number_list -= 1
-# print(number_list)
-# print(number_list2)
