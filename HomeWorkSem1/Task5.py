@@ -14,5 +14,5 @@ numAY = int(input('Введите координату Y точки A = '))
 numBX = int(input('Введите координату X точки B = '))
 numBY = int(input('Введите координату Y точки B = '))
 
-distance = math.sqrt((numAX - numBX)**2 + (numAY - numBY)**2)
+distance = math.sqrt((numAX - numBX) ** 2 + (numAY - numBY) ** 2)
 print(f'Расстояние между А ({numAX},{numAY}) и В ({numBX}, {numBY}) -> {round(distance, 3)}')
