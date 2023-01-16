@@ -110,7 +110,7 @@ async def bot_turn(message):
         if total <= 28:
             take = total
         else:
-            var = (Game.get_total() - 29)%28
+            var = (Game.get_total()%29)
             take = var if var > 0 else random.randint(1,28)
     Game.take_candies(take)
     await message.answer(f'Бот взял {take} конфет и их осталось {Game.get_total()}')
