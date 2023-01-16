@@ -4,6 +4,7 @@ from Config import dp
 import Text
 import Game
 import random
+from Keyboard import kb_new, kb_stop
 
 
 # @dp.message_handler(commands=['start'])
@@ -24,22 +25,52 @@ import random
 
 @dp.message_handler(commands=['start'])
 async def on_start(message: Message):
-    await message.answer(text=f'{message.from_user.first_name}{Text.greeting}')
+    await message.answer(text=f'{message.from_user.first_name}{Text.greeting}', reply_markup=kb_new)
 
 
 @dp.message_handler(commands=['new_game'])
 async def start_new_game(message: Message):
-    Game.new_game()
     if Game.check_game():
-        toss = random.randint(0, 2)
+        Game.set_total_to_max()
+    else:
+        Game.new_game()
+    if Game.check_game():
+        toss = random.choice([True, False])
         if toss:
             await player_turn(message)
         else:
             await bot_turn(message)
 
 
+@dp.message_handler(commands=['stop_game'])
+async def stop_game(message):
+    Game.new_game()
+    await message.reply('ИГРА ОКОНЧЕНА', reply_markup=kb_new)
+
+@dp.message_handler(commands=['set_total'])
+async def set_total_candies(message: Message):
+    if not Game.check_game():
+        max_total = message.text.split()
+        if len(max_total) > 1 and max_total[1].isdigit():
+            Game.set_max_total(int(max_total[1]))
+            await message.reply(text=f'Максимальное кол-во конфет изменено на {max_total[1]}')
+        else:
+            await message.reply(text='Этой коммандой можно настроить максимально кол-во конфет. Введите \n/set_total ... , где "..." целое число ')
+    else:
+        await message.reply(text='Эту настройку можно изменить только после окончания партии')
+
+
+@dp.message_handler(commands=['level'])
+async def set_bot_level(message: Message):
+    if not Game.check_game():
+        Game.change_level()
+        await message.reply(text=f'Уровень сложности установлен: {Game.get_bot_level()}')
+    else:
+        await message.reply(text='Эту настройку можно изменить только после окончания партии')
+
+
 async def player_turn(message: Message):
-    await message.answer(f'{message.from_user.first_name}, твой ход! Сколько возьмешь конфет?')
+    await message.answer(f'{message.from_user.first_name}, твой ход! Сколько возьмешь конфет?', reply_markup=kb_stop)
 
 
 @dp.message_handler()
@@ -69,25 +100,35 @@ async def take(message: Message):
 
 async def bot_turn(message):
     total = Game.get_total()
-    if total <= 28:
-        take = total
+    take = 0
+    if Game.get_bot_level() == 'Light':
+        if total <= 28:
+            take = total
+        else:
+            take = random.randint(1, 28)
     else:
-        take = random.randint(1, 28)
+        if total <= 28:
+            take = total
+        else:
+            var = (Game.get_total() - 29)%28
+            take = var if var > 0 else random.randint(1,28)
     Game.take_candies(take)
     await message.answer(f'Бот взял {take} конфет и их осталось {Game.get_total()}')
     if await check_win(message, take, 'Бот'):
         return
     await player_turn(message)
 
+
 async def check_win(message, take: int, player: str):
     if Game.get_total() <= 0:
         if player == 'player':
-            await message.answer(f'ПОБЕДА !!! {message.from_user.first_name} взял {take} конфет(ы) и одержал победу над железякой! Для новой игры введи /new_game')
+            await message.answer(
+                f'ПОБЕДА !!! {message.from_user.first_name} взял {take} конфет(ы) и одержал победу над железякой! Для новой игры введи /new_game')
         else:
-            await message.answer(f' Как же так {message.from_user.first_name} 0_0 ? Бот взял {take} конфет(ы) и одержал победу над тобой. Для новой игры введи /new_game')
+            await message.answer(
+                f' Как же так {message.from_user.first_name} 0_0 ? Бот взял {take} конфет(ы) и одержал победу над тобой. Для новой игры введи /new_game')
 
         Game.new_game()
         return True
     else:
         return False
-
