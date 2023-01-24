@@ -24,8 +24,51 @@ def safe_contact():
     for i, item in enumerate(new_db_list):
         new_db_list[i] = f'{item[0]};{item[1]};{item[2]};{item[3]}'
 
-    with open('NewDataBase.txt', 'w') as data:
-        data.writelines(f'\n')
+    with open('database.txt', 'w') as data:
+        data.writelines('')
     for i, item in enumerate(new_db_list):
-        with open('NewDataBase.txt', 'a') as data:
+        with open('database.txt', 'a') as data:
             data.writelines(f'{item}\n')
+
+
+def create_contact(text_0, text_1, text_2, text_3, text_4):
+    print(text_0)
+    new_contact = dict()
+
+    new_contact['lastname'] = input(f'\t{text_1}')
+    new_contact['firstname'] = input(f'\t{text_2}')
+    new_contact['phone'] = input(f'\t{text_3}')
+    new_contact['comment'] = input(f'\t{text_4}')
+    db_list.append(new_contact)
+
+
+def chage_contact(text_0, text_1, text_2, text_3, text_4, text_5):
+    global db_list
+
+    while True:
+        try:
+            num_contact = int(input(text_0))
+            break
+        except:
+            print(text_1)
+
+    new_contact = dict()
+
+    new_contact['lastname'] = input(f'\t{text_2}')
+    new_contact['firstname'] = input(f'\t{text_3}')
+    new_contact['phone'] = input(f'\t{text_4}')
+    new_contact['comment'] = input(f'\t{text_5}')
+    db_list[num_contact - 1] = new_contact
+
+
+def delete_contact(text_0, text_1):
+    global db_list
+
+    while True:
+        try:
+            num_contact = int(input(text_0))
+            break
+        except:
+            print(text_1)
+
+    db_list.pop(num_contact-1)

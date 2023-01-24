@@ -10,10 +10,15 @@ def main_menu() -> int:
                  ]
     for i in range(len(menu_list)):
         print(f'\t{i + 1}. {menu_list[i]}')
-    user_input = int(input('Введи команду >: '))
-    # TODO: сделать валидацию
-    return user_input
-
+    while True:
+        try:
+            user_input = int(input('Введи № команды >: '))
+            if  1 <= user_input <= 7:
+                return user_input
+            else:
+                print('Такой команды нет')
+        except:
+            print('Такой команды нет')
 
 def show_all(db: list):
     if db_success(db):
@@ -39,12 +44,24 @@ def exit_program():
     exit()
 
 
-def create_contact():
-    print('Создание нового контакта.')
-    new_contact = dict()
+create_contact_contact_text = ['Создание нового контакта.',
+                               'Введите фамилию >: ',
+                               'Введите имя >: ',
+                               'Введите телефон >: ',
+                               'Введите комментарий >: ']
 
-    new_contact['lastname'] = input('\tВведите фамилию >: ')
-    new_contact['firstname'] = input('\tВведите имя >: ')
-    new_contact['phone'] = input('\tВведите телефон >: ')
-    new_contact['comment'] = input('\tВведите комментарий >: ')
-    return new_contact
+
+def print_safe():
+    print('Файл сохранен')
+
+
+chage_contact_text = ['Какой контакт вы хотите изменить?: ',
+                      'Введите номер контакта, который нужно изменить.',
+                      'Введите фамилию >: ',
+                      'Введите имя >: ',
+                      'Введите телефон >: ',
+                      'Введите комментарий >: ']
+
+delete_contact_text = ['Какой контакт вы хотите изменить?: ',
+                      'Такого контакта нет',
+                      'Контакт удален.']
