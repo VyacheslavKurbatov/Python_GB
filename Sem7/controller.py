@@ -9,6 +9,8 @@ def input_handler(inp: int):
         case 2:
             model.read_db('database.txt')
             view.db_success(model.db_list)
+        case 3:
+            model.safe_contact()
         case 4:
             model.db_list.append(view.create_contact())
         case 7:
