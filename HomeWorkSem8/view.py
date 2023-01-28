@@ -32,20 +32,20 @@ def all_student(student_dict):
         print(f'{key} \tоценки: {value} \tоценка за четверть: {round(average_value, 2)}')
 
 
-def who_answer():
-    return input('Кто будет отвечать (для выхода введите exit)? : ')
+def who_answer() -> str:
+    return input('Введите имя ученика (для выхода введите exit)? : ')
 
 
-def what_mark():
-    try:
-        num = int(input('На какую оценку? : '))
-        if  1 <= num <= 5:
-            return num
-    except:
-        print('Введите число о 1 до 5')
+def what_mark() -> int:
+    while True:
+        try:
+            num = int(input('На какую оценку? : '))
+            if  1 <= num <= 5:
+                return num
+        except:
+            print('Введите число о 1 до 5')
 
-def statistics(student_dict):
-    student = input('Имя ученика (для выхода введите exit): ')
+def statistics(student_dict, student) -> str:
 
     if student == 'exit':
         return student
@@ -57,4 +57,4 @@ def statistics(student_dict):
         print(f'{key}: \t{value.get(student)} \tоценка за четверть: {round(average_value, 2)}')
 
 
-mistake = [' ', '_____________', 'Такого класса нет']
+mistake = [' ', '_____________', 'Такого класса нет', 'Такого ученика нет', 'У этого класса нет такого предмета']

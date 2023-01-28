@@ -8,9 +8,15 @@ def input_command_second_menu(inp: int, text: str):
             start_lesson(text)
         case 2:
             while True:
-                student_stat_name = view.statistics(model.class_dict)
+                student_stat_name = view.who_answer()
                 if student_stat_name == 'exit':
                     break
+                elif model.check_student(student_stat_name):
+                    view.statistics(model.class_dict, student_stat_name)
+                else:
+                    print(view.mistake[3])
+                    print(view.mistake[1])
+                    print(view.mistake[0])
         case 3:
             start()
 
@@ -33,7 +39,13 @@ def start():
 
 
 def start_lesson(class_num: str):
-    user_inp_lesson = view.lesson_menu()
+    check_less = False
+    while check_less == False:
+        user_inp_lesson = view.lesson_menu()
+        check_less = model.check_lesson(user_inp_lesson)
+        if check_less == False:
+            print(view.mistake[4])
+
     lesson_student_dict = model.lesson(user_inp_lesson)
     view.all_student(lesson_student_dict)
 
@@ -43,6 +55,12 @@ def start_lesson(class_num: str):
         if student == 'exit':
             model.save_file(class_num)
             break
-        mark = int(view.what_mark())
-        model.student_mark(student, mark)
-        view.all_student(lesson_student_dict)
+        elif model.check_student(student):
+
+            mark = int(view.what_mark())
+            model.student_mark(student, mark)
+            view.all_student(lesson_student_dict)
+        else:
+            print(view.mistake[3])
+            print(view.mistake[1])
+            print(view.mistake[0])

@@ -62,3 +62,29 @@ def save_file(path: str):
             data.writelines(f'{item}\n')
 
 
+def check_student(inp_stud):
+    global class_dict
+
+    for key, value in class_dict.items():
+        student_dict = value
+        student_list = []
+
+        for student, mark_list in student_dict.items():
+            student_list.append(student)
+
+        if inp_stud in student_list:
+            return True
+        else:
+            return False
+
+
+def check_lesson(inp_lesson):
+    global class_dict
+    lesson_list = []
+    for key, value in class_dict.items():
+        lesson_list.append(key)
+
+    if inp_lesson in lesson_list:
+        return True
+    else:
+        return False
