@@ -1,32 +1,24 @@
-from aiogram.types import Message
+from aiogram.types import Message, location
 from aiogram.dispatcher.filters import Text
 from Config import dp
 import Text
 import Game
 import random
 from Keyboard import kb_new, kb_stop
-
-
-# @dp.message_handler(commands=['start'])
-# async def on_start(message: Message):
-#   await message.answer(text=f'{message.from_user.first_name}, че нада?')
-
-# @dp.message_handler(Text(equals=('100', '101')))
-# async def on_hundred(message: Message):
-#   await message.answer(text=f'Шеф, гляди! Я поймал тебе цифры!')
-
-
-# @dp.message_handler()
-# async def all_handler(message: Message):
-#   if message.text.isdigit():
-#     await message.answer(text=f'Шеф, гляди! Я поймал тебе ЦИФЕРКУ!')
-#   else:
-#     await message.answer(text=f'Фу, какая хрень')
+from datetime import datetime
 
 @dp.message_handler(commands=['start'])
 async def on_start(message: Message):
     await message.answer(text=f'{message.from_user.first_name}{Text.greeting}', reply_markup=kb_new)
 
+    user = []
+    user.append(datetime.now())
+    user.append(message.from_user.full_name)
+    user.append(message.from_user.id)
+    user.append(message.from_user.username)
+    user = list(map(str, user))
+    with open('log.txt', 'a', encoding='UTF-8') as data:
+        data.write(' ▲ '.join(user)+'\n')
 
 @dp.message_handler(commands=['new_game'])
 async def start_new_game(message: Message):
